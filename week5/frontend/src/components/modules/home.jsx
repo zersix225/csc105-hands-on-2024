@@ -3,28 +3,30 @@ import TodoList from "../todo/todo";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import {DialogCloseButton} from "@/components/pop"
+import { DialogCloseButton } from "@/components/pop";
 
 const Home = () => {
   const [data, setData] = useState([]);
+
   const [input, setInput] = useState({
     name: "",
     success: false,
   });
+
+  const [error, setError] = useState("");
   const URL = "http://localhost:8000";
 
   const fetchTodos = async () => {
     try {
       const response = await axios.get(`${URL}/todos`);
       const newData = response.data.data;
-      console.log(newData);
       setData(newData);
     } catch (error) {
       console.log("error");
     }
   };
 
-  const createTodo = async (e) => {
+  const createTodo = async () => {
     try {
       const response = await axios.post(`${URL}/todos`, input);
       fetchTodos();
@@ -41,25 +43,44 @@ const Home = () => {
   const deleteTodo = async (id) => {
     try {
       const response = await axios.delete(`${URL}/todos/${id}`);
-      console.log("Todo deleted:", id);
+      console.log("Todo deleted:", response.data);
       setData(data.filter((todo) => todo.id !== id));
     } catch (error) {
-      console.error("Error creating todo:", error);
+      console.error("Error delete todo:", error);
     }
   };
 
-  const handleSave = (newData) => {
-    console.log('rr',newData)
-  }
+  const editTodo = async (updateTodo) => {
+    try {
+      await axios.put(`${URL}/todos/edit/${updateTodo.id}`, updateTodo);
+      console.log("Todo update:", updateTodo);
+      fetchTodos();
+    } catch (error) {
+      console.error("Error update todo:", error);
+    }
+  };
+
+  const successTodos = async (successTodo) => {
+    try {
+      const resposne = await axios.put(
+        `${URL}/todos/complete/${successTodo.id}`,
+        { success: successTodo.success }
+      );
+      console.log("Todo complete:", resposne.data.success);
+      fetchTodos();
+    } catch (error) {
+      console.error("Error complete todo:", error);
+    }
+  };
 
   useEffect(() => {
     fetchTodos();
   }, []);
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-screen flex justify-center items-center mx-10 md:mx-0">
       <div className="w-2xl">
-        <h1 className="text-center text-3xl my-4">Welcome to TODO List</h1>
+        <h1 className="text-center font-bold text-3xl my-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-purple-900">Welcome to TODO List</h1>
         <div>
           <div className="flex space-x-2 mb-2">
             <Input
@@ -71,18 +92,32 @@ const Home = () => {
               }}
               value={input.name}
             />
-            <Button onClick={createTodo}>Add</Button>
+            <Button
+              onClick={() => {
+                if (input.name !== "") {
+                  createTodo();
+                  setError("");
+                } else {
+                  setError("Please write something");
+                }
+              }}
+            >
+              Add
+            </Button>
           </div>
 
-          {data.map((item, index) => (
-            <div key={index} className="mb-2">
-              <TodoList title={item.name}>
-                <DialogCloseButton onSave={handleSave}/>
-                {/* <Button className='bg-gray-500'
-                  
-                >
-                  Edit
-                </Button> */}
+          {error && <p className="text-red-500 text-sm my-2">{error}</p>}
+
+          {data.map((item) => (
+            <div key={item.id} className="mb-2">
+              <TodoList
+                title={item.name}
+                isSuccess={successTodos}
+                id={item.id}
+                initialSuccess={item.success}
+              >
+                {console.log(item.success)}
+                <DialogCloseButton onSave={editTodo} id={item.id} />
 
                 <Button
                   className="bg-red-500"

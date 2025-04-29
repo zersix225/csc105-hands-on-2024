@@ -1,12 +1,9 @@
-import { Copy } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -14,31 +11,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function DialogCloseButton({ onSave }) {
-    const [newData, setNewData] = useState('')
+export function DialogCloseButton({ onSave, id }) {
+    const [newData, setNewData] = useState({
+        id: id,
+        name: ''
+    })
     const handleClick = () => {
         onSave(newData); 
     };
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" className="bg-gray-500">
+                <Button variant="outline">
                     Edit
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>Edit Todo</DialogTitle>
                 </DialogHeader>
+                <DialogDescription>Update your todo item below.</DialogDescription>
                 <div className="flex items-center space-x-2">
                     <div className="grid flex-1 gap-2">
-                        <Input 
-                            placeholder="Enter new todo" 
-                            onChange={(e) => setNewData(e.target.value)}
-                            value={newData}
+                        <Input
+                            name="name"
+                            placeholder="Enter new todo name" 
+                            onChange={(e) => setNewData({...newData, [e.target.name]: e.target.value})}
+                            value={newData.name}
                         />
                     </div>
-                    <Button type="submit" onClick={handleClick}>Save</Button>
+                    <DialogClose asChild>
+                        <Button type="submit" onClick={handleClick}>Save</Button>
+                    </DialogClose>
                 </div>
             </DialogContent>
         </Dialog>

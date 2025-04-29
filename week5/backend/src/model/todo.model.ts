@@ -23,10 +23,11 @@ const EditTodo = async (todoId: number, editTodoName: string) => {
   return updatedTodo;
 };
 
-const SuccessTodo = async (todoId: number) => {
+const SuccessTodo = async (todoId: number, success: boolean) => {
+  const newSuccess = (!success)? false : true
   const completedTodo = await prisma.todo.update({
     where: { id: todoId },
-    data: { success: true },
+    data: { success: newSuccess },
   });
   return completedTodo;
 };

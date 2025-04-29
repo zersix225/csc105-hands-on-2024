@@ -45,8 +45,9 @@ const AddTodo = async (c: Context) => {
 
 const EditTodoName = async (c: Context) => {
   try {
-    const { id, name } = await c.req.json();
-    const updatedTodo = await todoModel.EditTodo(id, name);
+    const newId = parseInt(c.req.param('id'))
+    const { name } = await c.req.json();
+    const updatedTodo = await todoModel.EditTodo(newId, name);
     return c.json({
       success: true,
       data: updatedTodo,
@@ -66,8 +67,9 @@ const EditTodoName = async (c: Context) => {
 
 const CompleteTodo = async (c: Context) => {
   try {
-    const { id } = await c.req.json();
-    const completedTodo = await todoModel.SuccessTodo(id);
+    const newId = parseInt(c.req.param('id'))
+    const { success } = await c.req.json()
+    const completedTodo = await todoModel.SuccessTodo(newId, success);
     return c.json({
       success: true,
       data: completedTodo,
@@ -87,8 +89,8 @@ const CompleteTodo = async (c: Context) => {
 
 const DeleteTodo = async (c: Context) => {
   try {
-    const id = parseInt(c.req.param('id'))
-    const deletedTodo = await todoModel.DeleteTodo(id);
+    const newId = parseInt(c.req.param('id'))
+    const deletedTodo = await todoModel.DeleteTodo(newId);
     return c.json({
       success: true,
       data: deletedTodo,
