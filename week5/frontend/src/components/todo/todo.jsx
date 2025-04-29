@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 
 
-const TodoList = ({ title }) => {
+const TodoList = ({ title, children }) => {
   return (
     <Card className="w-full">
       <CardContent className='flex justify-between items-center'>
@@ -21,8 +21,7 @@ const TodoList = ({ title }) => {
         </div>
 
         <div className="space-x-1">
-            <Button className='bg-gray-500'>Edit</Button>
-            <Button className='bg-red-500'>Delete</Button>
+            {children}
         </div>
       </CardContent>
     </Card>

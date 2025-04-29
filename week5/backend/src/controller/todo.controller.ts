@@ -1,15 +1,15 @@
 import type { Context } from "hono";
 import * as todoModel from "../model/todo.model.ts";
 
-type checktodo = {
-  name: string
-  status: false
-}
-
 const GetTodo = async (c: Context) => {
   try {
-    const data = await todoModel.GetTodo();
-    return c.json(data, 200);
+    const todos = await todoModel.GetTodo()
+    return c.json({
+      success: true,
+      data: todos,
+      msg: "Fetched todos successfully",
+    });
+
   } catch (e) {
     return c.json(
       {
@@ -24,28 +24,19 @@ const GetTodo = async (c: Context) => {
 
 const AddTodo = async (c: Context) => {
   try {
-    const body = await c.req.json<checktodo>();
-    if (!body.name)
-      return c.json(
-        {
-          success: false,
-          data: null,
-          msg: "Missing required fields",
-        },
-        400
-      );
-    const newTodo = todoModel.AddTodo(body.name);
+    const { name } = await c.req.json(); 
+    const newTodo = await todoModel.AddTodo(name);
     return c.json({
       success: true,
       data: newTodo,
-      msg: "Add new Todo!",
+      msg: "Added new todo successfully",
     });
   } catch (e) {
     return c.json(
       {
         success: false,
         data: null,
-        msg: `Internal Server Error : ${e}`,
+        msg: `Internal Server Error: ${e}`,
       },
       500
     );
@@ -54,77 +45,61 @@ const AddTodo = async (c: Context) => {
 
 const EditTodoName = async (c: Context) => {
   try {
-    const param = c.req.query("id");
-    if (param !== undefined && param !== null) {
-      const body = await c.req.json<checktodo>();
-      if (!body.name)
-        return c.json(
-          {
-            success: false,
-            data: null,
-            msg: "Missing required fields",
-          },
-          400
-        );
-      const newTodo = todoModel.EditTodo(parseInt(param), body.name);
-      return c.json({
-        success: true,
-        data: newTodo,
-        msg: "Edit Todo!",
-      });
-    }
+    const { id, name } = await c.req.json();
+    const updatedTodo = await todoModel.EditTodo(id, name);
+    return c.json({
+      success: true,
+      data: updatedTodo,
+      msg: "Edited todo name successfully",
+    });
   } catch (e) {
     return c.json(
       {
         success: false,
         data: null,
-        msg: `Internal Server Error : ${e}`,
+        msg: `Internal Server Error: ${e}`,
       },
       500
     );
   }
 };
 
-const CompleteTodo = (c: Context) => {
+const CompleteTodo = async (c: Context) => {
   try {
-    const param = c.req.query("id");
-    if (param !== undefined && param !== null) {
-      const newTodo = todoModel.SuccessTodo(parseInt(param));
-      return c.json({
-        success: true,
-        data: newTodo,
-        msg: "Complete",
-      });
-    }
+    const { id } = await c.req.json();
+    const completedTodo = await todoModel.SuccessTodo(id);
+    return c.json({
+      success: true,
+      data: completedTodo,
+      msg: "Completed todo successfully",
+    });
   } catch (e) {
     return c.json(
       {
         success: false,
         data: null,
-        msg: `Internal Server Error : ${e}`,
+        msg: `Internal Server Error: ${e}`,
       },
       500
     );
   }
 };
 
-const DeleteTodo = (c: Context) => {
+const DeleteTodo = async (c: Context) => {
   try {
-    const param = c.req.query("id");
-    if (param !== undefined && param !== null) {
-      const newTodo = todoModel.DeleteTodo(parseInt(param));
-      return c.json({
-        success: true,
-        data: newTodo,
-        msg: "Delete!!",
-      });
-    }
+    const id = parseInt(c.req.param('id'))
+    const deletedTodo = await todoModel.DeleteTodo(id);
+    return c.json({
+      success: true,
+      data: deletedTodo,
+      msg: "Deleted todo successfully",
+    });
   } catch (e) {
     return c.json(
       {
         success: false,
         data: null,
-        msg: `Internal Server Error : ${e}`,
+        msg: `Internal Server Error: ${e}`,
       },
       500
     );

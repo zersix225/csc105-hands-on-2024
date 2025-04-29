@@ -123,6 +123,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
@@ -148,8 +152,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = \"file:./data.db\"\n}\n\nmodel Todo {\n  id      Int     @id @default(autoincrement())\n  name    String\n  success Boolean @default(false)\n}\n",
-  "inlineSchemaHash": "aa26183426c4ea6625ce7f05d044e3c918fc01428ffaca9333e732a656723e26",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"windows\"]\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = \"file:./data.db\"\n}\n\nmodel Todo {\n  id      Int     @id @default(autoincrement())\n  name    String\n  success Boolean @default(false)\n}\n",
+  "inlineSchemaHash": "ff039c0094b41f5703bae71aca97240866f66766257b525c6808a9fe1fdf7395",
   "copyEngine": true
 }
 config.dirname = '/'

@@ -1,50 +1,41 @@
-import { db } from "../index.ts";
+import { prisma } from "../index.ts";
 
-const GetTodo = () => {
-  const todo = db.todo.findMany
-  return todo;
+const GetTodo = async () => {
+  const todos = await prisma.todo.findMany()
+  return todos
 };
 
-const AddTodo = (newTodoName: string) => {
-  const todo = db.todo.create({
+const AddTodo = async (newTodoName: string) => {
+  const newTodo = await prisma.todo.create({
     data: {
       name: newTodoName,
+      success: false,
     },
   });
-  return todo;
+  return newTodo;
 };
 
-const EditTodo = (todoId: number, editTodoName: string) => {
-  const todo = db.todo.update({
-    where : {
-      id : todoId,
-    },
-    data: {
-      name: editTodoName,
-    }
-  })
-  return todo;
+const EditTodo = async (todoId: number, editTodoName: string) => {
+  const updatedTodo = await prisma.todo.update({
+    where: { id: todoId },
+    data: { name: editTodoName },
+  });
+  return updatedTodo;
 };
 
-const SuccessTodo = (todoId: number) => {
-  const todo = db.todo.update({
-    where : {
-      id : todoId,
-    },
-    data: {
-      success: true,
-    }
-  })
-  return todo;
+const SuccessTodo = async (todoId: number) => {
+  const completedTodo = await prisma.todo.update({
+    where: { id: todoId },
+    data: { success: true },
+  });
+  return completedTodo;
 };
 
-const DeleteTodo = (todoId: number) => {
-  const todo = db.todo.delete({
-    where : {
-      id : todoId,
-    },
-  })
-  return todo;
+const DeleteTodo = async (todoId: number) => {
+  const deletedTodo = await prisma.todo.delete({
+    where: { id: todoId },
+  });
+  return deletedTodo;
 };
 
 export { GetTodo, AddTodo, EditTodo, SuccessTodo, DeleteTodo };

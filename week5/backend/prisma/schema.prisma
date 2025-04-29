@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {
@@ -19,3 +20,4 @@ model Todo {
   name    String
   success Boolean @default(false)
 }
+
