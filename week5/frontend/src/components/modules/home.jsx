@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoList from "../todo/todo";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input"
-
+import axios from "axios";
 
 const Home = () => {
   const [isAdd, setAdd] = useState([]);
   const [input, setInput] = useState('')
+  const URL = 'http://localhost:8000'
+
+  const fetchTodos = async() => {
+    const todos = await axios.get(`${URL}/todos`)
+    setAdd (todos.data)
+  }
+
+  useEffect (
+    fetchTodos()
+  )
 
   return (
     <div className="h-screen flex justify-center items-center">

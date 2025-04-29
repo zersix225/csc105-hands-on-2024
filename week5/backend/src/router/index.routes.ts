@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import { todoRouter } from "./todo.routes.ts";
+import { GetTodo } from "../controller/todo.controller.ts";
 
 const mainRouter = new Hono();
 
-mainRouter.route("/todo", todoRouter);
+mainRouter.get("/todo", GetTodo);
 
 export { mainRouter };
