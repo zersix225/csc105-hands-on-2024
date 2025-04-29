@@ -1,11 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { PrismaClient } from "./generated/prisma/index.ts";
 import { mainRouter } from "./router/index.routes.ts";
 import { logger } from "hono/logger";
+import { PrismaClient } from "./generated/prisma/index.js";
 
 const app = new Hono();
-export const db = new PrismaClient();
+export const prisma = new PrismaClient();
 
 app.use(logger());
 

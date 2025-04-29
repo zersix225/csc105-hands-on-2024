@@ -1,23 +1,41 @@
-import { db } from "../index.ts";
+import { prisma } from "../index.ts";
 
-const GetTodo = () => {
-  //TODO
+const GetTodo = async () => {
+  const todos = await prisma.todo.findMany()
+  return todos
 };
 
-const AddTodo = (newTodoName: string) => {
-  //TODO
+const AddTodo = async (newTodoName: string) => {
+  const newTodo = await prisma.todo.create({
+    data: {
+      name: newTodoName,
+      success: false,
+    },
+  });
+  return newTodo;
 };
 
-const EditTodo = (todoId: number, editTodoName: string) => {
-  //TODO
+const EditTodo = async (todoId: number, editTodoName: string) => {
+  const updatedTodo = await prisma.todo.update({
+    where: { id: todoId },
+    data: { name: editTodoName },
+  });
+  return updatedTodo;
 };
 
-const SuccessTodo = (todoId: number) => {
-  //TODO
+const SuccessTodo = async (todoId: number) => {
+  const completedTodo = await prisma.todo.update({
+    where: { id: todoId },
+    data: { success: true },
+  });
+  return completedTodo;
 };
 
-const DeleteTodo = (todoId: number) => {
-  //TODO
+const DeleteTodo = async (todoId: number) => {
+  const deletedTodo = await prisma.todo.delete({
+    where: { id: todoId },
+  });
+  return deletedTodo;
 };
 
 export { GetTodo, AddTodo, EditTodo, SuccessTodo, DeleteTodo };
