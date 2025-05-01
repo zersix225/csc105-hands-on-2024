@@ -109,7 +109,7 @@ const Home = () => {
           {error && <p className="text-red-500 text-sm my-2">{error}</p>}
 
           {data.map((item) => (
-            <div key={item.id} className="mb-2">
+            <div key={item.id} classN ame="mb-2">
               <TodoList
                 title={item.name}
                 isSuccess={successTodos}
