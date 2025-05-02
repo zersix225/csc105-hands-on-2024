@@ -11,4 +11,4 @@
 
 <span style="color:yellow">Punnatorn Boonkrajang</span> -> Implement frontend and connecting Backend and Frontend
 
-<span style="color:yellow">Kraiwich</span> -> Design web, implement frontend
+<span style="color:yellow">Pongsagron</span> -> Design web ui, implement frontend
